@@ -2,15 +2,16 @@
 
 ## 6 Haziran Ödevleri:
 - [ ] Github'ın Gitflow'u ile diğer yaklaşımları arasındaki fark nedir? ( gitflow vs ..)
-- [ ] [Git and GitHub with Briana Swift](https://www.youtube.com/playlist?list=PLg7s6cbtAD17Gw5u8644bgKhgRLiJXdX4) Youtube Listesi incelensin. (11 Video)
-- [ ] Merge pull request
-    - [ ] Create a merge commit
-    - [ ] Squash and merge 
-    - [ ] Rebase and merge altında ne fark var (Ödev)
+- [+] [Git and GitHub with Briana Swift](https://www.youtube.com/playlist?list=PLg7s6cbtAD17Gw5u8644bgKhgRLiJXdX4) Youtube Listesi incelensin. (11 Video)
+- [+] Merge pull request
+    - [+] Create a merge commit
+    - [+] Squash and merge 
+    - [+] Rebase and merge altında ne fark var (Ödev)
+    [Ödeve git](https://github.com/Kodluyoruz51BootcampMVCCore/ii-hafta-odevi-bthnaydmr97/blob/master/Rebase%20vs%20Merge)
 - [ ] issue ve #pull request de id ler neden artıyor farklı sekmeler olmasına rağmen?
-- [ ] [Ramp up on Git and GitHub](https://lab.github.com/githubtraining/paths/ramp-up-on-git-and-github) (ödev)
+- [+] [Ramp up on Git and GitHub](https://lab.github.com/githubtraining/paths/ramp-up-on-git-and-github) (ödev)
 - [ ] Aspnetboilerplate ve yan ürünler araştırması. [AspNet Boilerplate - Web Application Framework](https://aspnetboilerplate.com/)
-- [ ] hackerRank.com --> [30 Days Of Code](https://www.hackerrank.com/domains/tutorials/30-days-of-code)
+- [+] hackerRank.com --> [30 Days Of Code](https://www.hackerrank.com/domains/tutorials/30-days-of-code)
 
 ## 7 Haziran Ödevleri:
 - [ ] Razor Pages Nedir?
