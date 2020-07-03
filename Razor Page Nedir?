@@ -1,0 +1,3 @@
+Razor Pages, sayfa tabanlı web uygulamalarını çok daha kolay ve üretken bir şekilde kodlamanızı sağlayan yeni bir yapı sunar. ASP.Net&#39;te olduğu gibi ASP.Net Core çatısında da bulunur. Bu bölüm, Razor Pages tanıtımı ve Visual Studio Code ile kullanılmasını kapsar.
+
+Razor bir programlama dili değildir. C# kodlarımızı gömmemize olanak sağlayan bir işaretleme dilidir. Sunucu tarafında işlenir ve HTML çıktı istemci tarafına (tarayıcıya) gönderilir. Razor sözdizimi PHP ve ASP&#39;de olduğu gibi sade ve anlaşılırdır.
