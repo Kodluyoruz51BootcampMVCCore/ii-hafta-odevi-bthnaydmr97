@@ -14,14 +14,14 @@
 - [+] hackerRank.com --> [30 Days Of Code](https://www.hackerrank.com/domains/tutorials/30-days-of-code)
 
 ## 7 Haziran Ödevleri:
-- [ ] Razor Pages Nedir?
-- [ ] 4 Farklı Projede Yapılacak *Change Authentication* :
-  - [ ] No Authentication
-  - [ ] Individual User Account
-  - [ ] Work or School Accounts
-  - [ ] Windows Authentication seçili projeler oluşturulmalı
+- [+] Razor Pages Nedir?[Ödeve git](https://github.com/Kodluyoruz51BootcampMVCCore/ii-hafta-odevi-bthnaydmr97/blob/master/Razor%20Page%20Nedir%3F)
+- [+] 4 Farklı Projede Yapılacak *Change Authentication* :
+  - [+] No Authentication
+  - [+] Individual User Account
+  - [+] Work or School Accounts
+  - [+] Windows Authentication seçili projeler oluşturulmalı
 - [ ] Ayarlardaki Output kısmındaki Console Application nedir? diğerleri arasında fark nedir? [Ders Akışındaki 6. Madde'yi inceleyin.] ( araştırma ödev verildi ).
-- [ ] c# json serialize / deserialize
-- [ ] MVC vs MVVM
+- [+] c# json serialize / deserialize[Ödeve git](https://github.com/Kodluyoruz51BootcampMVCCore/ii-hafta-odevi-bthnaydmr97/tree/master/Serialize)
+- [+] MVC vs MVVM[Ödeve git](https://github.com/Kodluyoruz51BootcampMVCCore/ii-hafta-odevi-bthnaydmr97/blob/master/MVC%20vs%20MVP%20vs%20MVVM)
    - [ ] MVP vs MVW vs MVU Pattern arasındaki farkı araştır
    - [ ] Model-View-Update (MVU) nedir?
