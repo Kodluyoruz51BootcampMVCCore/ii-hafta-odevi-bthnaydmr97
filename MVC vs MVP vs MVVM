@@ -1,0 +1,79 @@
+**MVC** (Model-View-Controller),  **MVP**  (Model-View-Presenter) ve  **MVVM** (Model-View-View Model) patternlerinin oluşmasının arkasında yatan temel motivasyon aslında az öncede bahsettiğim gibi hem Separation of Concerns prensibini uygulamak hemde kolay bir şekilde Unit Test yazılmasına olanak sağlamak, yani Test Driven Development (TTD) yöntemini uygulayabilmek. Bazı durumlarda da reusibility&#39;i arttırabiliyor tabi, çünkü bu patternleri uyguladığımız zaman ufak değişiklerle, alt yapımızı koruyarak uygulamımın farklı platformlarda (Windows Forms, Asp.NET, WPF …) çalışmasını sağlayabiliyoruz yani UI bağımsız uygulamalar geliştirebiliyoruz. (Tamam çoğu zaman bahsettiğim gibi tereyağından kıl çeker gibi olmuyor :) )
+
+UI&#39;ın kendine has bir işleyişi olduğundan, belli karar mekanizmalarına ihtiyaç duyduğundan bahsettik. Peki bundan anlamımız gereken ne? Elbette en başta aklımıza şu şu Text Box&#39;lar dolsun sonra kaydete basayım kaydolsun tarzı şeyler geliyor. Ama mesela şu iki Text Box dolduğunda alttaki button enabled olsun eğer dolu değilse disabled olsun, şuranın rengi değişsin, şurası resize olsun, message box çıksın, grid üzerindeki kayıtlar belli özelliklere sahipse rengi değişsin vs… görüldüğü gibi olay bir anda UI&#39;da kullanıcıdan alınan verileri bizim Domain Model&#39;e aktarmamız işinden daha karmaşık bir hal almaya başladı. Bütün bu kodların hepsini View&#39;imizin arkasına yazıp, yönetmeye kalkıştığımız zaman olay içinden çıkılmaz bir hal alıyor.
+
+O yüzden Business işleriyle Prenstation işleri birbirlerinden ayrılmalı :). İşte yukarıda bahsettiğim patternler de bu işi yapmamızı sağlıyor. Başlayalım ozaman ;
+
+## Model ve View Üzerine
+
+Patternlere geçmeden önce View ve Model deyince aklımıza ne gelmeli birazcık ondan bahsetmek istiyorum. Zaten en önemli presentation pattern&#39;i  **Model View Whatever**  :)
+
+**Model :****  **Kullanıcaya göstermek ve manipule etmesini sağlamak istediğimiz verileri içereren nesneler. Çoğu zaman database entitylerimiz herangi bir değişliğe uğramdan bu görevi üstlenebiliyor. Ama bazen çeşitli validasyonlardan, işlemlerden geçmesi gerekebiliyor, kullanıcı için daha anlamlı nesnenelere yani Modellere map edilmesi gerekebiliyor, yani son tahlilde Business katmanımızdan aldığımız, kullanıcı için anlamlı veri içeren nesneler diyebiliriz.
+
+**View :****  **Kullanıcıya Model&#39;i gösterdiğimiz ve Model üzerinde çeşitli manipulasyonlara izin verdiğimiz yer, Web olsun, windows olsun fark etmez, amaç kullanıcıya birşeyler göstermek ve inputlar almak.
+
+## Tarihçe
+
+MVC -\&gt; Presentation Model veya Application Model veya MVVM (Daha detaylı açıklayacağım)
+ -\&gt; MVP
+ -\&gt; MVP kendi arasında Supervising Controller ve Passive View diye ikiye ayrılıyor
+
+## MVC (Model-View-Controller)
+
+Aslında en eski pattern MVC. Kökü 1970&#39;lere kadar uzanmakta. Tarihine çok fazla girip konuyu dağıtmak istemiyorum.
+
+Controller kullanıcıdan gelen inputları karşılar, ayrıca UI ile ilgili bütün akışı yönetir ve kararları verir. Controller View hakkında hiç birşey bilmez ama View Controller&#39;ı bilir. Görüldüğü üzere Controller ile View arasında 1-n bir ilişki var yani bir Controller birden fazla View tarafından kullanılabilir. Controller kullanıcıdan gelen inputlar doğrultusunda Model üzerinde değişikleri yapar, Model değiştiğini View&#39;e notify eder yani View ile Model arasında Observer ilişkisi var. View, Model&#39;e register olur, görüldüğü üzere bir model&#39;e birden fazla View register olabilir. Aralarında ki observer ilişkisi sayesinde, Model&#39;deki herangi bir değişiklik ona register olmuş bütün View&#39;lere yansır.
+
+Bir senaryo üzerinden anlatırsak daha anlamlı olucak sanırım. Diyelim ki kullanıcı bir kütüphane veritabanından bir kitap ile ilgili arama yaptı. Controller kullanıcıdan gelen keyword&#39;u Business Layer aracılığıyla sorgular ve result&#39;ı alır (bazı durumlarda olayın karmaşıklığına göre Controller&#39;ın businness layer görevini üstlenebilir), result&#39;ı Model&#39;deki ilgili alanlara set eder, ayrıca bir kayıt mı geldi, birden fazlı mı geldi gibi bilgileride Model&#39;e iletir. Unutulmamlıdır ki buradaki Model, View ile ilgili bazı stateleri tutar. Model kendisindeki değişikliği View&#39;e notify eder, View Model&#39;de birden fazla sonuç varsa bir dialog olarak gösterebilir (Burada aynı Controller ve aynı Model&#39;i kullanan başka bir View&#39;den bahsedebiliriz) veya tek kayıtsa ilgili yeri güncelleyip kullanıcıya gösterir.
+
+Genel olarak MVC de ki akış bu şekildedir, tabi ki kullanılan teknoloji ve platformlara göre MVC&#39;nin birçok farklı implemantasyonu çıktı, burada 30 küsür senelik bir patternin evriminden bahsediyoruz. Mesela bunun örneklerinden biride ASP.NET MVC orada ki MVC&#39;nin nasıl işletiği ile ilgili bilgiyi paylaşacağım.
+
+MVC&#39;nin en büyük avantajı sorumlulukları Model,View ve Controller&#39;a temiz bir şekilde dağıtmasıdır. Controller&#39;lar uygulamanın akışını kontrol ederler, nerede neyin nasıl yapılmasına gerektiğine karar verirler. View sadece kendisinin nasıl update olacağına ilişkin business&#39;ı içerir, Model&#39;i oluşturur ve kullanıcıya gösterir. View uygulamayla ilgili hiç bir logic içermediğinden dolayı farklı platformlar (Windows, Web) için aynı controller&#39;ı kullanan birden fazla View olabilir (Daha öncede dediğim gibi her zaman okadar kolay olmayabiliyor).
+
+Ama dezavantajlarıda yok değil. View ile Model arasındaki observer ilişkisi ilk bakışta karışık gelebilir, View&#39;in güncellenmesi için, Controller&#39;ın Model&#39;i güncellemesi gerek ki Model&#39;de değiştiğini View&#39;e bildirebilsin. Ayrıca .Net gibi modern programlama ortamları User Inputlar&#39;ın eventlerini zaten kendileri handle ediyorlar, mesela buton&#39;a tıklandığıda veya textbox&#39;ın text&#39;i değiştiğindeki eventler gibi. Bu durumlarda klasik MVC&#39;yi uygulamak zorlaşıyor, inputları direk Controller karşılasın diye zaten UI&#39;ın kendi handle ettiği o doğal yapıyı kırmak durumunda kalınabiliyor. Dediğim gibi MVC&#39;nin son 30 yılda birçok farklı implementasyonu çıkmış durumda, bazı durumlarda Controller View&#39;i bir interface aracılığıyla biliyor, bazı değişiklikler View üzerinde eventler aracılığıyla kendisi yapabiliyor vs.
+
+Ayrıca klasik anlamda MVC uygulandığında Unit Test yaparken zorlanabiliyoruz, View&#39;in update olmasıyla ilgi süreç oldukça dolaylı bir şekilde yapılıyor, Controller ile View arasında bir abstraction ile bile olsa ilişki yok, View&#39;leri Mock&#39;layamıyoruz.
+
+Gelelim MVC&#39;nin ASP.NET MVC&#39;de nasıl uygulandığına;
+
+Bildiğiniz üzere web farklı bir mantıkta çalışıyor, kullanıcılar Browser üzerinden render edilmiş HTML aracılığıyla etkileşime geçiyorlar. Requestler işlenmek üzere Server&#39;a gönderiliyor, Server View&#39;i ve Model&#39;i yeniden oluşturuyor, gerekli manipulasyonları yapıyor, HTML&#39;i oluşturup Client&#39;a geri gönderiyor.
+
+Burada iki çeşit yaklaşım var Martin Fowler açıklamış ; [Page Controller](http://martinfowler.com/eaaCatalog/pageController.html) ve [Front Controller](http://martinfowler.com/eaaCatalog/frontController.html).
+
+Mesela klasik ASP.NET yaklaşımında (Web Forms, aspx) Page Controller kullanılıyor, Page kendisi karar mekanizması, postback&#39;den gelen data ışığında kendisini yeniden yaratıyor, gerekli manipulasyonları yapıyor , hangi model&#39;in gerekli olduğuna karar veriyor ve inputları kendisi karşılıyor ( code behind&#39;da ki eventler gibi). Tabi böyle olunca Controller ve View arasındaki ayrılık ilkesi tam olarak uygulanamıyor.
+
+ASP.NET MVC&#39;de ise Front Controller mantığını var. Yani Controller karar mekanizması, her HTTP request Controller&#39;da ki bir method&#39;a (Action) denk geliyor, Controller Model ve View&#39;i yeniden oluşturuyor, gerekirse manipulasyonları yapıyor. Controller bu kadar iyi ayrıldığı içinde Unit Test çok kolay yapılıyor.
+
+Aslında ASP.NET MVC ile bir klasik web mantığına geri döndük, iyiki döndük. HTTP request&#39;i bir Handler karşılıyor, gerekli işlemleri yapıyor, Response&#39;u dönüyor. Herşey bir Pipeline&#39;dan geçiyor, olması gerektiği gibi. Neyse bu başka bir makalenin konusu :).
+
+Benim tavsiyem bir Windows Forms uygulaması yazıyorsanız, klasik MVC&#39;yi kullanmamınız yönünde, olaylar bir süre sonra işin içinden çıkılmaz bir hale gelebiliyor. Birazdan anlatacağım MVP&#39;yi kullanabilirsiz ve ya daha iyis MVPVM ki kendisi başka bir makalenin konusu.
+
+## MVP (Model-View-Presenter)
+
+MVP Pattern&#39;i aslında MVC&#39;den evrilmiş bir pattern, sadece bağımlılıklar değişiyor ve Controller&#39;ın yerine Prenseter (ki bu durumda kendisine hala Controller denebiliyor) geliyor.
+
+İnputları direk View karşılıyor, modern programlama ortamlarının mantığına daha uygun. View Presenter&#39;ını biliyor, Presenter ise View&#39;i bir interface aracılığıyla biliyor aralarında bir abstraction var. Ayrıca MVC&#39;nin aksine View ile Presenter arasında 1–1 ilişki var. Presenter Model&#39;i manipule ediyor, Model&#39;in değişikleri Presenter&#39;a notify etme durumu birazcık tartışmalı, etmeyedebilir, Presenter ilgili değişikliği yapıp, View&#39;i kendisi güncelleyebilir. Zaten buradaki en büyük fark MVC&#39;nin aksine Presenter&#39;ın View&#39;i bir interface aracılığıyla kendisinin güncellemesi, View burada Presenter&#39;a interface aracılığıyla istediği bilgiyi açabilir, ister Textbox&#39;ın Text&#39;i olsun ister Buton&#39;ın Enabled&#39;ı olsun. Presenter View&#39;in nasıl bir View, Web mi? Windows mu? olduğuyla ilgilenmiyor, sadece data akışıyla ilgili ne yapması gerektiğini, View&#39;den gelen etkileşimleri nasıl karşılaması gerektiğini ve View&#39;de nasıl değişikler yapması gerektğini biliyor. Yani Prensenter&#39;ımız burada karar mekanizaması rölünü üstleniyor.
+
+ Farkt ettiyseniz View buradak kendi state tutma görevinide üstlenmiş.
+
+Görüldüğü üzere MVC&#39;ye göre daha temiz ve anlaşılır bir yaklaşım söz konusu. Ayrıca şu haliyle View&#39;ler çok rahat Mock&#39;lanabiliyorlar, bütün uygulama akışını çok rahat bir şekilde Test edebilir, yani MVC ye göre daha Unit Test dostu.
+
+MVP genel hatlarıyla böyle olsa da, farklı yaklaşımlar da söz konusu. Aslında konu View&#39;de nekadar az kod olacağı. Bazıları basit Business (UI ile ilgili olan) kurallarını View&#39;de, daha kompleks olanlarını Presenter&#39;da yapmaya karar verebilir, bazıları ise bütün UI Business&#39;ının Presenter&#39;da olmasına karar verebilir. Aslında olay attığımız taşın ürküttüğümüz kurbağaya deyip deymeceği ile ilgili, ne kadar Test edilebilir bir koda ihtiyacımız var.
+
+Martin Fowler MVP&#39;yi 2 farklı yaklaşımla ele alıyor ; [Passive View](http://martinfowler.com/eaaDev/PassiveScreen.html) ve [Supervising Controller](http://martinfowler.com/eaaDev/SupervisingPresenter.html)
+
+MVP ile yazılan uygulamalar&#39;da UI bağımsızlık ilkesi daha rahat uygulanabiliyor. Ayrıca şahsi kanaatim, Model, View ve Presenter üzerinde ki sorumlulukları daha iyi dağıtılmış olması yönünde. Yukarıda da bahsettiğim gibi farklı ihtiyaçlara göre farklı yaklaşımları var, istersek UI&#39;da hiç bir logic bırakmadan herşeyi Presenter&#39;a yıkabiliriz ve çok temiz UI&#39;lara sahip olabilir.
+
+MVP ile hem Windows Forms hem ASP.NET Web Forms uygulamalarını çok rahat geliştirebilir. Arkadaşım Mert Susur&#39;un konu hakkında örnek kodları içeren bir makalesi var, okumanızı tavsiye ederim. [Buradan](http://www.mertsusur.com/Blog/?tag=/windows+forms)
+
+## MVVM (Model-View-ViewModel)
+
+MVVM Pattern&#39;i hakkında bilgi vermeden önce Presentation Model hakkında bilgi vermek istiyorum. Çünkü MVVM dediğimiz şeye; WPF ve Silverlight için Prensentation Model diyebiliriz.
+
+Presentation Model hem View ile ilgili stateleri tutuyor hemde View hakkında hiç birşey bilmiyor. Aslında PM View&#39;in state ve davranışlarıyla ilgili bilgiyi kendi üzerine alıyor ve Business Layer ile arasındaki kordinasyonu sağlıyor ve View&#39;e karar vermeyle ilgili çok az şey bırakıyor. View yine stateleri tutuyor aslında. Fakat MVP&#39;nin aksine Presentation Model View ile ilgili hiç bir bilgiye ihtiyaç duymuyor, bu yüzden ki View ile PM arasında 1-n bir ilişki var, bir PM birden fazla View&#39;de kullanılabiliyor, bu kısmıyla MVC&#39;ye benziyor, fakat MVC&#39;nin aksine View üzerinde ki manipulasyonlar PM üzerinden gerçekleşiyor. Aslında şöylede bakabiliriz, PM ile View arasında yine bir observer ilişkisi var, .Net&#39;e kullanım şekillerinden biride  **INotifyPropertyChanged**  interface&#39;inden türeyip, .Net&#39;in binding alt yapısını kullanması. Zaten özünde yaptığı iş DataBinding. Kendi propertylerini View&#39;in propertyleriyle senkronize ediyor, aynı zamanda state&#39;lerede karar veriyor, mesela şu şu TextBox dolduğunda şu Buton enabled olsun gibi. Tabi herzaman enabled olucak bir kontrol&#39;un state&#39;ini PM&#39;de tutmak anlamsız.
+
+ PM&#39;in en büyük avantajı, hiç bir View&#39;e ihtiyaç duymadan bir View&#39;in davranışlarını ve Data&#39;sını barındarabilmesi, bu yapısıyla TDD&#39;ye (Test Driven Development) çok uygun. Şu haliyle Prensentation Patternleri arasında en ideal pattern&#39;lerden biri (bkz: [MVP-VM](http://www.denizirgin.com/post/2012/02/23/MVP-VM-Pattern.aspx)).
+
+Gözle görülür tek dezavantajı, herangi bir Binding alt yapısına sahip olmayan platformlarda PM ile View arasında ki senkronizasyonu sağlamak için çok fazla kod yazmak gerekebilir.
+
+Şimdi isterseniz MVVM&#39;e geçelim. Yukarıda da bahsettiğim gibi MVVM PM ile aynı prensip üzerine kurulu ama WPF ve Silverlight&#39;da ki XAML ve Binding alt yapısına optimize bir şekilde düzenlenmiş olması. Yukarda da bahsettiğim gibi PM&#39;in tek dez avantajı elde uygun bir binding mekanizması yoksa çok fazla bu iş ile ilgili kod yazılması. Windows Forms&#39;un bir binding alt yapısı var ama WPF&#39;in Binding alt yapısı çok üstün, çok yetenekli. En basidinden WPF&#39;de herangi bir UI Elementinin (bkz : XAML) herangi bir propertysini bir .NET nesnesinin property ve ya methoduna bind edebiliyorsunuz ayrıca bir karar mekanizmasına sahip (bkz : CanExecute) Command alt yapısıda var.

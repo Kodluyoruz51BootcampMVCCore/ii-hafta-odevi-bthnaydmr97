@@ -1,0 +1,19 @@
+- **Serialize/Deserialize Nedir?**
+
+Kısaca bahsedecek olursak serialize ya da serialization, bir datayı kolayca ulaşılabilir hala getirmek ya da bir datayı platform bağımsız hale getirmektir(json,xml,binary).
+
+Bu durumda deserialize ise: Ulaşılabilir hale gelmiş datayı tekrardan hangi dilde yazıyorsak o dildeki objeye çevirmektir.
+
+- **Peki Neden Önemli?**
+
+Bir yazılım projesini yukarıda bahsettiğim gibi bayrak yarışı gibi örneklendirecek olursak:
+
+Projemizdeki servislerin her biri bayrak taşıyan koşucu misali gayet iyi şekilde çalışıyor olsun. Veri tabanı bağlantıları kusursuz. Cachemekanizmalarımız mükemmel bir şekilde işliyor olsun. Sonunda oluşturduğumuz veriyi client tarafına aktaracağımız zaman bir serializeişlemine tabi tutmamız gerekecek. Eğer buradaki serialize işlemi yavaş olursa response süresini uzatacak ve bu da performansı etkileyecek. Hatta bilgilerimizi redis gibi cache de yada NoSql veritabanlarından birinde tutuyorsak,serialize yönteminize göre performansınız daha çok etkilenmektedir.
+
+- **Peki Serialize/Deserialize Yöntemlerinden Hangisi Neden Seçilmeli?**
+
+Aslında bu sorunun yanıtı tamamen projenin gereksinimleri ve verinizin büyüklüğüne göre değişir.
+
+Örneğin: Küçük bir veriyi serialize edip, bir dosyaya yazdığınızı ve bu dosyayı müşteriye mail olarak ileten bir uygulamanız olsun. Buradaki veri küçük olduğundan ve dosyaya yazdığınız verinin anlamlı bir veri olmasını istediğinizden dolayı Json kullanmak mantıklı olacaktır.
+
+Fakat aynı örneğin tersini düşünelim verimiz çok büyük fakat uygulamamız bu sefer serialize edip redise atacak. Bu sefer redise attığımız verinin anlamlı bir halde olmasına gerek yok. Çünkü redisden çekerken zaten bu veriyi deserialize edeceğimizden dolayı anlamlı bir objeye dönmüş olacaktır. Bu durumda performansı düşünerek en hızlı serialize hangi kütüphane yapıyorsa o seçilebilir.
